@@ -20,6 +20,7 @@ export default function RootLayout({
  </Link>
  <div className="flex gap-4 ml-4">
  <Link href="/posts" className="hover:text-blue-300 transition-colors">บทความ</Link>
+ <Link href="/courses" className="hover:text-blue-300 transition-colors">รายวิชา</Link>
  <Link href="/users" className="hover:text-blue-300 transition-colors">ผู้ใช้</Link>
  <Link href="/about" className="hover:text-blue-300 transition-colors">เกี่ยวกับ</Link>
  </div>
