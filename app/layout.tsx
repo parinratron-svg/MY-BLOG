@@ -23,6 +23,7 @@ export default function RootLayout({
  <Link href="/courses" className="hover:text-blue-300 transition-colors">รายวิชา</Link>
  <Link href="/users" className="hover:text-blue-300 transition-colors">ผู้ใช้</Link>
  <Link href="/about" className="hover:text-blue-300 transition-colors">เกี่ยวกับ</Link>
+ <Link href="/blog-spa" className="hover:text-blue-300 transition-colors">สินค้า</Link>
  </div>
  </nav>
  <div className="max-w-4xl mx-auto py-8 px-4">

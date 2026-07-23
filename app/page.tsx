@@ -37,7 +37,7 @@ export default async function Home() {
              <a href="https://github.com" className="text-sm bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition">GitHub</a>
           </div>
             <p>🎯 <strong>เป้าหมาย:</strong> เป็นนักพัฒนาซอฟต์แวร์ที่สร้างสรรค์สิ่งดีๆ</p>
-            <p>💡 <strong>คติประจำใจ:</strong> [ใส่คติของคุณ]</p>
+            <p>💡 <strong>คติประจำใจ:</strong> [ทำวันนี้ให้ดีที่สุด]</p>
             <p>🎮 <strong>งานอดิเรก:</strong> เล่นเกม, อ่านมังงะ, เขียนโค้ด</p>
           </div>
         </div>
