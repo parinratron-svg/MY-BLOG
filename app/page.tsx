@@ -29,7 +29,7 @@ export default async function Home() {
         </div>
         <div>
           <h1 className="text-4xl font-extrabold text-blue-900">ปริญญาธรณ์ นาคิน</h1>
-          <p className="text-xl text-blue-600 font-medium">ชื่อเล่น: [ชื่อเล่น] | รหัสนิสิต: 6720210043</p>
+          <p className="text-xl text-blue-600 font-medium">ชื่อเล่น: [ปืน] | รหัสนิสิต: 6720210043</p>
           <div className="mt-4 text-gray-700 space-y-1">
             {/* เพิ่ม: Social Links */}
           <div className="flex gap-4 mt-4">

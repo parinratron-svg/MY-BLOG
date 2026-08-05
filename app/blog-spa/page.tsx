@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { ExternalItem } from '@/lib/external';
 
-export default function BlogSpaPage() {
+function BlogSpaContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // อ่านค่าจาก URL สะท้อน State (Task W.3)
   const initialSource = searchParams.get('source') === 'news' ? 'news' : 'products';
   const initialSearch = searchParams.get('search') || '';
   const initialId = searchParams.get('id') || null;
@@ -20,7 +19,6 @@ export default function BlogSpaPage() {
   const [searchQuery, setSearchQuery] = useState<string>(initialSearch);
   const [selectedId, setSelectedId] = useState<string | null>(initialId);
 
-  // ฟังก์ชันอัปเดต URL แบบไมโคร SPA (Task W.2 & W.3)
   const updateUrl = (newSource: string, newSearch: string, newId: string | null) => {
     const params = new URLSearchParams();
     params.set('source', newSource);
@@ -29,33 +27,28 @@ export default function BlogSpaPage() {
     router.replace(`/blog-spa?${params.toString()}`);
   };
 
-  // เปลี่ยน Tab Source
   function selectSource(s: 'products' | 'news') {
     setSource(s);
-    setSelectedId(null); // เคลียร์ modal เมื่อเปลี่ยน tab
+    setSelectedId(null);
     updateUrl(s, searchQuery, null);
   }
 
-  // จัดการช่องค้นหา Real-time Client-side (Task W.1)
   function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
     const query = e.target.value;
     setSearchQuery(query);
     updateUrl(source, query, selectedId);
   }
 
-  // คลิกเปิด Modal ดูรายละเอียด (Task W.2)
   function handleOpenModal(id: string) {
     setSelectedId(id);
     updateUrl(source, searchQuery, id);
   }
 
-  // ปิด Modal
   function handleCloseModal() {
     setSelectedId(null);
     updateUrl(source, searchQuery, null);
   }
 
-  // Fetch ข้อมูลเมื่อ source เปลี่ยน
   useEffect(() => {
     setIsLoading(true);
     setIsError(false);
@@ -75,14 +68,12 @@ export default function BlogSpaPage() {
       });
   }, [source]);
 
-  // กรองข้อมูลฝั่ง Client ทันทีโดยป้องกัน Error กรณีที่ title หรือ subtitle เป็น null/undefined (Task W.1)
   const filteredItems = items.filter((item) => {
     const titleMatch = item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false;
     const subtitleMatch = item.subtitle?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false;
     return titleMatch || subtitleMatch;
   });
 
-  // หา Item ที่ถูกเลือกมาแสดงใน Modal
   const selectedItem = items.find((item) => item.id === selectedId);
 
   return (
@@ -91,7 +82,6 @@ export default function BlogSpaPage() {
         🧩 Blog Aggregator (SPA)
       </h1>
 
-      {/* แถบ Tab และ ช่องค้นหา Real-time (Task W.1 & W.3) */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
         <div className="flex gap-2">
           <button
@@ -112,7 +102,6 @@ export default function BlogSpaPage() {
           </button>
         </div>
 
-        {/* ช่อง Search กรองฝั่ง Client (ไม่ fetch ใหม่) */}
         <input
           type="text"
           placeholder="ค้นหาข้อมูลทันที..."
@@ -122,7 +111,6 @@ export default function BlogSpaPage() {
         />
       </div>
 
-      {/* ส่วนแสดงสถานะ Loading / Error / Empty (Task W.4) */}
       {isLoading ? (
         <div className="py-20 text-center text-blue-600 animate-pulse font-medium">
           ⏳ กำลังซิงค์ข้อมูลล่าสุด กรุณารอสักครู่...
@@ -151,7 +139,6 @@ export default function BlogSpaPage() {
         </div>
       )}
 
-      {/* Modal แสดงรายละเอียด (Task W.2) */}
       {selectedId && selectedItem && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-2xl relative animate-in fade-in zoom-in-95">
@@ -171,5 +158,13 @@ export default function BlogSpaPage() {
         </div>
       )}
     </main>
+  );
+}
+
+export default function BlogSpaPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-blue-600">Loading...</div>}>
+      <BlogSpaContent />
+    </Suspense>
   );
 }
