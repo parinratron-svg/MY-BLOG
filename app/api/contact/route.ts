@@ -1,22 +1,18 @@
-import { revalidatePath } from 'next/cache';
-import { addMessage, getMessages } from '@/lib/messages';
+import { withErrorHandling } from '@/lib/withErrorHandling';
+import { createMessage, listMessages } from '@/lib/messageService';
 
-export async function POST(req: Request) {
-  const data = await req.json();
-
-  if (!data.name || !data.email || !data.message) {
-    return Response.json({ error: 'ข้อมูลไม่ครบ' }, { status: 400 });
-  }
-
-  addMessage({
-    name: data.name,
-    email: data.email,
-    message: data.message,
-  });
-
-  console.log('messages after add:', getMessages());
-
-  revalidatePath('/dashboard');
-
-  return Response.json({ ok: true });
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const search = url.searchParams.get('search') ?? '';
+  const all = listMessages();
+  const filtered = search
+    ? all.filter((m) => m.name.includes(search) || m.message.includes(search))
+    : all;
+  return Response.json({ messages: filtered });
 }
+
+export const POST = withErrorHandling(async (request: Request) => {
+  const body = await request.json();
+  const saved = createMessage(body);
+  return Response.json({ ok: true, item: saved }, { status: 201 });
+});
