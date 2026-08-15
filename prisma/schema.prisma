@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Message {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  message   String
+  createdAt DateTime  @default(now())
+  comments  Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  author    String
+  content   String
+  createdAt DateTime @default(now())
+  post      Message  @relation(fields: [postId], references: [id])
+}
