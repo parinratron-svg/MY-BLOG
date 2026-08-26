@@ -10,8 +10,7 @@ export default async function DashboardPage() {
     redirect('/login');
   }
 
-  const messages = getMessages();
-
+  const messages = await getMessages();
   return (
     <main className="p-8">
       <div className="mb-6">
@@ -51,7 +50,9 @@ export default async function DashboardPage() {
                   <strong>ข้อความ:</strong> {message.message}
                 </p>
                 <p className="mt-2">
-                  <strong>เวลาที่ส่ง:</strong> {message.createdAt}
+                  <p className="mt-2">
+  <strong>เวลาที่ส่ง:</strong> {new Date(message.createdAt).toLocaleString('th-TH')}
+</p>
                 </p>
               </div>
             </details>

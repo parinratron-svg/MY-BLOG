@@ -1,5 +1,5 @@
 import { prisma } from '../lib/prisma';
-
+import bcrypt from 'bcrypt';
 async function main() {
   // ล้างข้อมูลเก่าก่อน กัน error unique/ซ้ำตอนรัน seed หลายรอบ
   await prisma.comment.deleteMany();
@@ -21,6 +21,14 @@ async function main() {
       { author: 'Eve', content: 'เห็นด้วยครับ', postId: msg2.id },
     ],
   });
+
+
+  const hashed = await bcrypt.hash('1234', 10);
+await prisma.user.upsert({
+ where: { email: 'admin@tsu.ac.th' },
+ update: {},
+ create: { email: 'admin@tsu.ac.th', password: hashed },
+});
 }
 
 main()
@@ -31,3 +39,4 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+  

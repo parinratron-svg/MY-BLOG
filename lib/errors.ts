@@ -4,3 +4,6 @@ export class NotFoundError extends Error {
 export class ValidationError extends Error {
  status = 400;
 }
+export class ForbiddenError extends Error {
+ status = 403;
+}
