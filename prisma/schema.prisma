@@ -28,8 +28,16 @@ model Comment {
   id        String   @id @default(cuid())
   postId    String
   author    String
-  authorId  String?  // ← เพิ่มใหม่ ใช้ตรวจ Authorization   content   String 
- 
+  authorId  String?
+  content   String
   createdAt DateTime @default(now())
   post      Message  @relation(fields: [postId], references: [id])
+  reactions Reaction[]   // ← เพิ่มใหม่: จุดนี้แหละที่จะไปชนกับฝั่ง UI ทีหลัง
+}
+model Reaction {
+  id        String   @id @default(cuid())
+  emoji     String   // เช่น "👍" หรือ "❤️"
+  commentId String
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  createdAt DateTime @default(now())
 }
