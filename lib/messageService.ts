@@ -14,6 +14,7 @@ export async function createMessage(raw: unknown) {
  }
  return MessageModel.addMessage(data);
 }
+// ค้นหาข้อความตาม name หรือ message content
 export async function listMessages(search?: string) {
  const all = await MessageModel.getMessages();
  if (!search) return all;
