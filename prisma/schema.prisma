@@ -29,7 +29,7 @@ model Comment {
   postId    String
   author    String
   authorId  String?  // ← เพิ่มใหม่ ใช้ตรวจ Authorization   content   String 
-  content   String
+ 
   createdAt DateTime @default(now())
   post      Message  @relation(fields: [postId], references: [id])
 }

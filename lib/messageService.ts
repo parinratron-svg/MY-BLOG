@@ -14,9 +14,14 @@ export async function createMessage(raw: unknown) {
  }
  return MessageModel.addMessage(data);
 }
-
-export async function listMessages() {
-  return MessageModel.getMessages();
+// ค้นหาข้อความตาม name หรือ message content
+export async function listMessages(search?: string) {
+ const all = await MessageModel.getMessages();
+ if (!search) return all;
+ return all.filter((m) =>
+ m.name.includes(search) ||
+m.message.includes(search)
+ );
 }
 
 export async function getMessageById(id: string) {
@@ -57,5 +62,6 @@ export async function removeMessage(id: string, sessionUserId: string) {
     throw err;
   }
 }
+
 
 
