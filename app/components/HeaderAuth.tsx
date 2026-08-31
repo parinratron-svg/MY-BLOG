@@ -24,17 +24,31 @@ export default function HeaderAuth() {
       window.removeEventListener('focus', syncAuthState);
     };
   }, [pathname]);
+       
 
+        
   return (
+      
+
+
     <>
       {!isLoggedIn ? (
-        <Link
+        <div className="flex items-center gap-2">
+          <Link
+            href="/signup"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-900 shadow-md ring-1 ring-slate-300 transition hover:bg-slate-50"
+          >
+            <span className="text-base">📝</span>
+            <span>สมัครสมาชิก</span>
+          </Link>
+          <Link
           href="/login"
           className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-bold text-slate-900 shadow-md transition hover:bg-emerald-300"
         >
           <span className="text-base">🔐</span>
           <span>ล็อกอิน</span>
         </Link>
+        </div>
       ) : (
         <Link
           href="/logout"

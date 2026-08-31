@@ -8,3 +8,6 @@ export async function createUser(email: string, plainPassword: string) {
  const hashedPassword = await bcrypt.hash(plainPassword, 10);
  return prisma.user.create({ data: { email, password: hashedPassword } });
 }
+export async function findUserById(id: string) {
+  return prisma.user.findUnique({ where: { id } });
+}

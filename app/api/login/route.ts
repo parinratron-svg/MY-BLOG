@@ -11,6 +11,13 @@ export async function POST(request: Request) {
   }
 
   const res = Response.json({ ok: true });
-  res.headers.set('Set-Cookie', `session=${user.id}; Path=/; HttpOnly; Secure; SameSite=Strict`);
+
+  const isProd = process.env.NODE_ENV === 'production';
+  const secureFlag = isProd ? '; Secure' : '';
+
+  res.headers.set(
+    'Set-Cookie',
+    `session=${user.id}; Path=/; HttpOnly; SameSite=Strict${secureFlag}`
+  );
   return res;
 }

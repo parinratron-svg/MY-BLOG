@@ -44,21 +44,31 @@ export default async function RootLayout({
  <Link href="/blog-spa" className="rounded-lg bg-white/10 px-3 py-2 text-sm font-medium transition hover:bg-white/20">สินค้า</Link>
  <Link href="/contact" className="rounded-lg bg-cyan-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-cyan-400">ติดต่อ</Link>
  <Link href="/dashboard" className="rounded-lg bg-orange-500 px-3 py-2 text-sm font-semibold text-white transition hover:bg-orange-400">Dashboard</Link>
+ <Link href="/contact/history" className="rounded-lg bg-white/10 px-3 py-2 text-sm font-medium transition hover:bg-white/20">ประวัติข้อความ</Link>
  </div>
 
- <div className="ml-auto flex items-center justify-end gap-2">
+<div className="ml-auto flex items-center justify-end gap-2">
  {isLoggedIn ? (
-   <Link href="/logout" className="inline-flex items-center gap-2 rounded-full bg-rose-500 px-4 py-2 text-sm font-bold text-white shadow-md transition hover:bg-rose-400">
-     <span className="text-base">🚪</span>
-     <span>ล็อกเอ้า</span>
-   </Link>
- ) : (
-   <Link href="/login" className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-bold text-slate-900 shadow-md transition hover:bg-emerald-300">
-     <span className="text-base">🔐</span>
-     <span>ล็อกอิน</span>
-   </Link>
+  <>
+    
+    <Link href="/logout" className="inline-flex items-center gap-2 rounded-full bg-rose-500 px-4 py-2 text-sm font-bold text-white shadow-md transition hover:bg-rose-400">
+      <span className="text-base">🚪</span>
+      <span>ล็อกเอ้า</span>
+    </Link>
+  </>
+) : (
+   <>
+     <Link href="/signup" className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-900 shadow-md ring-1 ring-slate-300 transition hover:bg-slate-50">
+       <span className="text-base">📝</span>
+       <span>สมัครสมาชิก</span>
+     </Link>
+     <Link href="/login" className="inline-flex items-center gap-2 rounded-full bg-emerald-400 px-4 py-2 text-sm font-bold text-slate-900 shadow-md transition hover:bg-emerald-300">
+       <span className="text-base">🔐</span>
+       <span>ล็อกอิน</span>
+     </Link>
+   </>
  )}
- </div>
+</div>
  </div>
  </nav>
  <div className="mx-auto max-w-4xl px-4 py-8">

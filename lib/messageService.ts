@@ -3,31 +3,46 @@ import * as MessageModel from './messages';
 import { messageSchema } from './schemas';
 import { ZodError } from 'zod';
 import { ForbiddenError, ValidationError } from './errors';
+import { findUserById } from './users'; // ← เพิ่ม import นี้
 
-export async function createMessage(raw: unknown) {
- let data;
- try {
- data = messageSchema.parse(raw);
- } catch (err) {
+export async function createMessage(raw: unknown, authorId: string | null = null) {
+  let data;
+  try {
+    data = messageSchema.parse(raw);
+  } catch (err) {
     if (err instanceof ZodError) throw new ValidationError(err.issues[0].message);
     throw err;
- }
- return MessageModel.addMessage(data);
+  }
+  return MessageModel.addMessage({ ...data, authorId });
 }
 
 export async function listMessages() {
   return MessageModel.getMessages();
 }
 
+export async function listMessagesByAuthor(authorId: string) {
+  const all = await listMessages();
+  return all.filter((m) => m.authorId === authorId);
+}
+
 export async function getMessageById(id: string) {
   return MessageModel.getMessageById(id);
+}
+
+// ฟังก์ชันช่วยเช็คสิทธิ์: เจ้าของ หรือ แอดมิน
+async function canModify(message: { authorId: string | null }, sessionUserId: string) {
+  if (message.authorId === sessionUserId) return true;
+
+  const user = await findUserById(sessionUserId);
+  return user?.role === 'admin';
 }
 
 export async function editMessage(id: string, updates: object, sessionUserId: string) {
   const message = await getMessageById(id);
   if (!message) return null;
 
-  if (message.authorId !== sessionUserId) {
+  const allowed = await canModify(message, sessionUserId);
+  if (!allowed) {
     throw new ForbiddenError('คุณไม่มีสิทธิ์แก้ไขข้อความนี้');
   }
 
@@ -40,11 +55,13 @@ export async function editMessage(id: string, updates: object, sessionUserId: st
     throw err;
   }
 }
+
 export async function removeMessage(id: string, sessionUserId: string) {
   const message = await getMessageById(id);
   if (!message) return null;
 
-  if (message.authorId !== sessionUserId) {
+  const allowed = await canModify(message, sessionUserId);
+  if (!allowed) {
     throw new ForbiddenError('คุณไม่มีสิทธิ์ลบข้อความนี้');
   }
 
@@ -57,5 +74,3 @@ export async function removeMessage(id: string, sessionUserId: string) {
     throw err;
   }
 }
-
-
