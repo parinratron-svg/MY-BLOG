@@ -32,4 +32,5 @@ model Comment {
  
   createdAt DateTime @default(now())
   post      Message  @relation(fields: [postId], references: [id])
+  reactionsCount Int @default(0) // ← เพิ่มใหม่ (ฝั่ง UI)
 }
