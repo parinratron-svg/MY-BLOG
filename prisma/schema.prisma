@@ -32,8 +32,10 @@ model Comment {
   content   String
   createdAt DateTime @default(now())
   post      Message  @relation(fields: [postId], references: [id])
-  reactions Reaction[]   // ← เพิ่มใหม่: จุดนี้แหละที่จะไปชนกับฝั่ง UI ทีหลัง
+  reactions Reaction[]
+  reactionsCount Int @default(0) // ← เพิ่มใหม่ (ฝั่ง UI)
 }
+
 model Reaction {
   id        String   @id @default(cuid())
   emoji     String   // เช่น "👍" หรือ "❤️"
