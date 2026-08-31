@@ -15,9 +15,14 @@ export async function createMessage(raw: unknown, authorId: string | null = null
   }
   return MessageModel.addMessage({ ...data, authorId });
 }
-
-export async function listMessages() {
-  return MessageModel.getMessages();
+// ค้นหาข้อความตาม name หรือ message content
+export async function listMessages(search?: string) {
+ const all = await MessageModel.getMessages();
+ if (!search) return all;
+ return all.filter((m) =>
+ m.name.includes(search) ||
+m.message.includes(search)
+ );
 }
 
 export async function listMessagesByAuthor(authorId: string) {
@@ -73,4 +78,11 @@ export async function removeMessage(id: string, sessionUserId: string) {
     }
     throw err;
   }
+<<<<<<< HEAD
 }
+=======
+}
+
+
+
+>>>>>>> bd461c0ac9b14c0f4eac48fa64bc983bc6cc8bc9
