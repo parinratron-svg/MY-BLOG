@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import * as CommentModel from './comments';
 import { cleanRichText } from './sanitize';
-
+import * as ReactionModel from './reactions';
 export async function createComment(data: any) {
   if (!data.author || !data.content || !data.postId) throw new Error('ข้อมูลไม่ครบ');
   const safeData = { ...data, content: cleanRichText(data.content) };
@@ -49,4 +49,18 @@ export async function removeComment(id: string, userId: string | null) {
     }
     throw err;
   }
+}
+
+export async function addReaction(commentId: string, emoji: string) {
+  if (!commentId || !emoji) throw new Error('ข้อมูลไม่ครบ');
+  // ปล่อยให้ NotFoundError จาก ReactionModel โผล่ผ่านไปให้ route จับ เหมือน pattern ของ editComment
+  return ReactionModel.createReaction(commentId, emoji);
+}
+
+export async function getReactionCounts(commentId: string) {
+  const reactions = await ReactionModel.getReactionsByCommentId(commentId);
+  return reactions.reduce((acc, r) => {
+    acc[r.emoji] = (acc[r.emoji] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
 }
