@@ -35,14 +35,15 @@ export async function getMessageById(id: string) {
 }
 
 // ฟังก์ชันช่วยเช็คสิทธิ์: เจ้าของ หรือ แอดมิน
-async function canModify(message: { authorId: string | null }, sessionUserId: string) {
+async function canModify(message: { authorId: string | null }, sessionUserId: string | null) {
+  if (!sessionUserId) return false;
   if (message.authorId === sessionUserId) return true;
 
   const user = await findUserById(sessionUserId);
   return user?.role === 'admin';
 }
 
-export async function editMessage(id: string, updates: object, sessionUserId: string) {
+export async function editMessage(id: string, updates: object, sessionUserId: string | null) {
   const message = await getMessageById(id);
   if (!message) return null;
 
@@ -61,7 +62,7 @@ export async function editMessage(id: string, updates: object, sessionUserId: st
   }
 }
 
-export async function removeMessage(id: string, sessionUserId: string) {
+export async function removeMessage(id: string, sessionUserId: string | null) {
   const message = await getMessageById(id);
   if (!message) return null;
 
