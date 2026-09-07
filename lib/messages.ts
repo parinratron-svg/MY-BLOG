@@ -4,7 +4,12 @@ export async function getMessageById(id: string) {
   return prisma.message.findUnique({ where: { id } });
 }
 
-export async function addMessage(data: { name: string; email: string; message: string }) {
+export async function addMessage(data: {
+  name: string;
+  email: string;
+  message: string;
+  authorId?: string | null;
+}) {
   return prisma.message.create({ data });
 }
 
