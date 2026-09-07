@@ -31,7 +31,7 @@ export default function MessageHistory() {
   }
 
   useEffect(() => {
-    loadMessages();
+    void Promise.resolve().then(loadMessages);
   }, []);
 
   function startEdit(msg: Message) {

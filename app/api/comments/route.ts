@@ -15,12 +15,13 @@ export async function POST(request: Request) {
     const data = await request.json();
     const comment = await createComment(data);
     return NextResponse.json(comment, { status: 201 });
-  } catch (err: any) {
-    if (err.message === 'ข้อมูลไม่ครบ') {
-      return NextResponse.json({ error: err.message }, { status: 400 });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : '';
+    if (message === 'ข้อมูลไม่ครบ') {
+      return NextResponse.json({ error: message }, { status: 400 });
     }
-    if (err.message === 'ไม่พบ post ที่ระบุ') {
-      return NextResponse.json({ error: err.message }, { status: 404 });
+    if (message === 'ไม่พบ post ที่ระบุ') {
+      return NextResponse.json({ error: message }, { status: 404 });
     }
     return NextResponse.json({ error: 'เกิดข้อผิดพลาดในการสร้างข้อมูล' }, { status: 500 });
   }

@@ -37,9 +37,10 @@ export async function PATCH(
       return NextResponse.json({ error: 'ไม่พบ comment นี้' }, { status: 404 });
     }
     return NextResponse.json(comment);
-  } catch (err: any) {
-    const status = err.status ?? 500; // ForbiddenError=403, NotFoundError=404
-    return NextResponse.json({ error: err.message || 'เกิดข้อผิดพลาดในการแก้ไข' }, { status });
+  } catch (err: unknown) {
+    const error = err as { message?: string; status?: number };
+    const status = error.status ?? 500;
+    return NextResponse.json({ error: error.message || 'เกิดข้อผิดพลาดในการแก้ไข' }, { status });
   }
 }
 
@@ -55,8 +56,9 @@ export async function DELETE(
       return NextResponse.json({ error: 'ไม่พบ comment นี้' }, { status: 404 });
     }
     return NextResponse.json({ message: 'ลบสำเร็จ' });
-  } catch (err: any) {
-    const status = err.status ?? 500;
-    return NextResponse.json({ error: err.message || 'เกิดข้อผิดพลาดในการลบ' }, { status });
+  } catch (err: unknown) {
+    const error = err as { message?: string; status?: number };
+    const status = error.status ?? 500;
+    return NextResponse.json({ error: error.message || 'เกิดข้อผิดพลาดในการลบ' }, { status });
   }
 }

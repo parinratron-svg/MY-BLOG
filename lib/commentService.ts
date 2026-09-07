@@ -2,9 +2,11 @@ import { Prisma } from '@prisma/client';
 import * as CommentModel from './comments';
 import { cleanRichText } from './sanitize';
 import * as ReactionModel from './reactions';
-export async function createComment(data: any) {
-  if (!data.author || !data.content || !data.postId) throw new Error('ข้อมูลไม่ครบ');
-  const safeData = { ...data, content: cleanRichText(data.content) };
+export async function createComment(data: unknown) {
+  if (!data || typeof data !== 'object') throw new Error('ข้อมูลไม่ครบ');
+  const commentData = data as { author?: string; content?: string; postId?: string };
+  if (!commentData.author || !commentData.content || !commentData.postId) throw new Error('ข้อมูลไม่ครบ');
+  const safeData = { ...commentData, content: cleanRichText(commentData.content) };
   try {
     return await CommentModel.addComment(safeData);
   } catch (err) {
@@ -59,8 +61,8 @@ export async function addReaction(commentId: string, emoji: string) {
 
 export async function getReactionCounts(commentId: string) {
   const reactions = await ReactionModel.getReactionsByCommentId(commentId);
-  return reactions.reduce((acc, r) => {
-    acc[r.emoji] = (acc[r.emoji] || 0) + 1;
+  return reactions.reduce((acc: Record<string, number>, reaction: { emoji: string }) => {
+    acc[reaction.emoji] = (acc[reaction.emoji] || 0) + 1;
     return acc;
-  }, {} as Record<string, number>);
+  }, {});
 }

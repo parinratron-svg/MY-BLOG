@@ -50,8 +50,6 @@ function BlogSpaContent() {
   }
 
   useEffect(() => {
-    setIsLoading(true);
-    setIsError(false);
     fetch(`/api/aggregate?source=${source}`)
       .then((r) => {
         if (!r.ok) throw new Error('Network response was not ok');

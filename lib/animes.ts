@@ -6,7 +6,7 @@ export type Anime = {
   note?: string;
 };
 
-let animes: Anime[] = [];
+const animes: Anime[] = [];
 let nextId = 1;
 
 export function getAnimes(): Anime[] {

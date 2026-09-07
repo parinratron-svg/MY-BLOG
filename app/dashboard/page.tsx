@@ -3,7 +3,8 @@ import { getMessages } from '@/lib/messages';
 import { getSessionUserIdServer } from '@/lib/auth';
 import { findUserById } from '@/lib/users';
 import Image from 'next/image';
-import DeleteMessageButton from '@/components/DeleteMessageButton';
+import Link from 'next/link';
+import DeleteMessageButton from '@/app/components/DeleteMessageButton';
 export default async function DashboardPage() {
   const userId = await getSessionUserIdServer();
 
@@ -29,12 +30,12 @@ export default async function DashboardPage() {
           </p>
 
           
-           <a
+           <Link
   href="/"
   className="mt-6 inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-bold text-white shadow-md transition hover:bg-slate-700"
 >
   กลับหน้าแรก
-</a>
+</Link>
         </div>
       </main>
     );
@@ -82,6 +83,9 @@ export default async function DashboardPage() {
                 <p className="mt-2">
                   <strong>เวลาที่ส่ง:</strong> {new Date(message.createdAt).toLocaleString('th-TH')}
                 </p>
+                <div className="mt-4">
+                  <DeleteMessageButton id={message.id} />
+                </div>
               </div>
             </details>
           ))}
