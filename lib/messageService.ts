@@ -78,11 +78,4 @@ export async function removeMessage(id: string, sessionUserId: string) {
     }
     throw err;
   }
-<<<<<<< HEAD
 }
-=======
-}
-
-
-
->>>>>>> bd461c0ac9b14c0f4eac48fa64bc983bc6cc8bc9
