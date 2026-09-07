@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { prisma } from './prisma';
 
 export async function getMessageById(id: string) {
@@ -13,7 +14,7 @@ export async function addMessage(data: {
   return prisma.message.create({ data });
 }
 
-export async function getMessages() {
+export async function getMessages(): Promise<Prisma.MessageGetPayload<{}>[]> {
   return prisma.message.findMany({ orderBy: { createdAt: 'desc' } });
 }
 
