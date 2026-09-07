@@ -14,7 +14,7 @@ export async function addMessage(data: {
   return prisma.message.create({ data });
 }
 
-export async function getMessages(): Promise<Prisma.MessageGetPayload<{}>[]> {
+export async function getMessages(): Promise<Prisma.MessageGetPayload<Prisma.MessageDefaultArgs>[]> {
   return prisma.message.findMany({ orderBy: { createdAt: 'desc' } });
 }
 

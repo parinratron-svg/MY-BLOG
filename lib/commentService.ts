@@ -2,9 +2,25 @@ import { Prisma } from '@prisma/client';
 import * as CommentModel from './comments';
 import { cleanRichText } from './sanitize';
 import * as ReactionModel from './reactions';
-export async function createComment(data: any) {
-  if (!data.author || !data.content || !data.postId) throw new Error('ข้อมูลไม่ครบ');
-  const safeData = { ...data, content: cleanRichText(data.content) };
+export async function createComment(data: unknown) {
+  if (!data || typeof data !== 'object') throw new Error('ข้อมูลไม่ครบ');
+
+  const input = data as Record<string, unknown>;
+  if (
+    typeof input.author !== 'string' ||
+    typeof input.content !== 'string' ||
+    typeof input.postId !== 'string' ||
+    typeof input.authorId !== 'string'
+  ) {
+    throw new Error('ข้อมูลไม่ครบ');
+  }
+
+  const safeData = {
+    author: input.author,
+    content: cleanRichText(input.content),
+    postId: input.postId,
+    authorId: input.authorId,
+  };
   try {
     return await CommentModel.addComment(safeData);
   } catch (err) {
