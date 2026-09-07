@@ -7,7 +7,9 @@ export async function GET(request: Request) {
   const search = url.searchParams.get('search') ?? '';
   const all = await listMessages();
   const filtered = search
-    ? all.filter((m) => m.name.includes(search) || m.message.includes(search))
+    ? all.filter((m: { name: string; message: string }) =>
+        m.name.includes(search) || m.message.includes(search)
+      )
     : all;
   return Response.json({ messages: filtered });
 }
