@@ -1,10 +1,12 @@
-<!-- trigger deploy -->
+# my-blog (Web Application Design and Development)
 
 https://github.com/user-attachments/assets/35b0ac1b-cb18-415a-bc91-6268932bf3ef
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) and deployed on **Vercel** with **Neon Serverless PostgreSQL**.
 
-## Getting Started
+---
+
+## 🚀 Getting Started
 
 First, run the development server:
 
@@ -20,25 +22,37 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📋 Workshop — Team Deployment Readiness (Week 12)
 
-## Learn More
+### 1. Deployment Readiness Checklist ของทีม (5 ข้อ)
 
-To learn more about Next.js, take a look at the following resources:
+1. **การตรวจสอบ Environment Variables ครบถ้วน (Configuration Check)**
+   - ตรวจสอบว่าตัวแปรลับทั้งหมด โดยเฉพาะ `DATABASE_URL` (แบบ pooled ของ Neon) และ `DIRECT_URL` ถูกตั้งค่าครบทั้ง 3 Scope (`Production`, `Preview`, `Development`) บน Vercel ก่อนการ Deploy ทุกครั้ง
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **การทดสอบบน Preview Deployment ก่อนเสมอ (Staging / Preview Testing)**
+   - ทุกครั้งที่มีการพัฒนาฟีเจอร์ใหม่ ต้องเปิด Pull Request (PR) และเข้าทดสอบฟังก์ชันทั้งหมด (การสมัครสมาชิก, การล็อกอิน, CRUD บทความ) บน Preview Link ให้ผ่าน 100% ก่อนกด Merge เข้าสู่ `main`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **การตรวจสอบความปลอดภัยของ Database Schema (Migration Safety)**
+   - หากมีการแก้ไขไฟล์ `schema.prisma` ต้องทดสอบ Migration และยืนยันว่าจะไม่ส่งผลกระทบหรือทำให้ข้อมูลเดิมบน Production สูญหาย
 
-## Deploy on Vercel
+4. **ข้อตกลงและกระบวนการอนุมัติก่อน Merge (Code Review & Team Sync)**
+   - ต้องได้รับการรีวิวและ Approve จากเพื่อนในทีมอย่างน้อย 1 คนก่อน และต้องแจ้งสมาชิกในทีมก่อนกด Merge เข้า `main` เสมอ เพื่อให้ทุกคนรับรู้สถานะการ Deploy ใหม่
 
-Preview deployment verification.
+5. **สิทธิ์การ Rollback และการเฝ้าระวังข้อผิดพลาด (Incident Response & Monitoring)**
+   - สมาชิกทุกคนในทีมต้องรู้วิธีการทำ Instant Rollback (`Promote to Production`) บน Vercel เมื่อเกิดเหตุฉุกเฉิน และต้องเฝ้าดูแท็บ Runtime Logs อย่างน้อย 5-10 นาทีหลังการ Deploy ขึ้น Production
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 2. การตั้งค่า Custom Domain
+- **สถานะ:** ใช้งานโดเมนหลักของ Vercel (`.vercel.app`) ซึ่งรองรับ HTTPS และเชื่อมต่อระบบ CI/CD อย่างสมบูรณ์
 
-'''
+---
+
+### 3. สรุปความพร้อมของ my-blog สำหรับเป็นฐานของ Final Project
+
+โปรเจกต์ `my-blog` มีความพร้อมสูงในการใช้เป็นฐานเริ่มต้นสำหรับ Final Project (Week 13-15) เนื่องจากระบบ CI/CD บน Vercel ทำงานร่วมกับ GitHub และฐานข้อมูล Neon Cloud Database ได้อย่างสมบูรณ์ รองรับการสร้าง Preview Deployment แบบอัตโนมัติในทุก PR และทีมได้ผ่านการฝึกฝนการอ่าน Runtime Logs เพื่อวินิจฉัยปัญหา รวมถึงการทำ Instant Rollback ในสภาพแวดล้อมจริงเรียบร้อยแล้ว
+
+**จุดที่ยังต้องระมัดระวัง:** 
+คือการจัดการ Schema Migration ในช่วงที่มีการแก้ไขโค้ดพร้อมกันหลายคน และการบริหารจัดการ Connection Limit ของฐานข้อมูล ซึ่งทีมจะใช้ Connection Pooling และปฏิบัติตาม Deployment Readiness Checklist อย่างเคร่งครัดเพื่อป้องกันไม่ให้ระบบ Production เกิดข้อผิดพลาด
